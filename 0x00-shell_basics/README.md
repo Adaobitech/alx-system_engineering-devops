@@ -1,1 +1,2 @@
-readme for shell basic
+#!/bin/bash
+this is a readme for shell basics
