@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Script that stops 4-infinite and beyond indefinite iteration
+
+kill "$(pgrep -f 4-infinite_and_beyond)"
