@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Script that contains the PID, process name of processes whose name contains bash
+
+pgrep bash -l
