@@ -1,35 +1,9 @@
-#!/bin/bash
-
-# Update package lists
-apt-get update
-
-# Install Nginx
-apt-get install -y nginx
-
-# Get the hostname of the server
-HOSTNAME=$(hostname)
-
-# Define Nginx configuration file path
-CONFIG_FILE="/etc/nginx/sites-available/default"
-
-# Add custom HTTP header configuration to Nginx
-cat <<EOF > $CONFIG_FILE
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-
-    server_name _;
-
-    add_header X-Served-By $HOSTNAME;
-
-    root /var/www/html;
-    index index.html index.htm index.nginx-debian.html;
-
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-}
-EOF
-
-# Reload Nginx to apply changes
-systemctl reload nginx
+#!/usr/bin/env bash
+# Script that configures Nginx server with a custom header
+apt-get -y update
+apt-get -y install nginx
+echo "Alx School" > /var/www/html/index.nginx-debian.html
+echo "Ceci n'est pas une page" > /usr/share/nginx/html/custom_404.html
+sed -i "s/server_name _;/server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/adexino0606 permanent;\n\n\terror_page 404 \/custom_404.html;\n\tlocation = \/custom_404.html {\n\t\troot \/usr\/share\/nginx\/html;\n\t\tinternal;\n\t}/" /etc/nginx/sites-available/default
+sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$HOSTNAME\";/" /etc/nginx/nginx.conf
+service nginx start
